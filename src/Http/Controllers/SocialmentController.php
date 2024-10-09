@@ -115,12 +115,16 @@ class SocialmentController extends BaseController
 
             Socialment::executePostLogin($connectedAccount);
         } catch (InvalidStateException $e) {
+            report($e);
             Session::flash('socialment.error', 'Something went wrong. Please try again.');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
+            report($e);
             Session::flash('socialment.error', 'We had a problem contacting the authentication server. Please try again.');
         } catch (AbortedLoginException $e) {
-            Session::flash('socialment.error', $e->getMessage());
+            report($e);
+            Session::flash('socialment.error', 'Login aborted');
         } catch (Exception $e) {
+            report($e);
             Session::flash('socialment.error', 'An unknown error occurred: ' . $e->getMessage() . '. Please try again.');
         }
 
